@@ -9,10 +9,19 @@
   margin-bottom: 16px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 15px;
   align-items: center;
   padding: 16px 0;
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
+}
+
+@media screen and (max-width: 600px) {
+  .toolbar {
+    justify-content: center;
+  }
 }
 
 .button {
