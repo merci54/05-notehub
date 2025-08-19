@@ -26,7 +26,7 @@ const noteSchema = Yup.object().shape({
     .min(3, 'Min 3 symbols!')
     .max(50, 'Max 50 symbols')
     .required('Title is required!'),
-  content: Yup.string().max(500, 'Max 500 symbols').required('title is required!'),
+  content: Yup.string().max(500, 'Max 500 symbols'),
   tag: Yup.string()
     .oneOf(['Work', 'Personal', 'Meeting', 'Shopping', 'Todo'])
     .required('Tag is required!'),
@@ -42,7 +42,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     },
   });
   const handleSubmit = (values: valuesProps) => {
-    mutate(values);
+    mutate({ title: values.title, content: values.content, tag: values.tag });
   };
 
   return (

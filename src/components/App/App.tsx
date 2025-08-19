@@ -6,7 +6,7 @@ import { fetchNotes } from '../../services/noteService';
 import { useState } from 'react';
 import Pagination from '../Pagination/Pagination';
 import SearchBox from '../SearchBox/SearchBox';
-import { useDebouncedCallback } from 'use-debounce';
+import { useDebounce } from 'use-debounce';
 import Modal from '../Modal/Modal';
 import NoteForm from '../NoteForm/NoteForm';
 import ErrorStub from '../ErrorStub/ErrorStub';
@@ -25,19 +25,24 @@ export default function App() {
     setIsModalOpen(false);
   };
 
-  const debouncedSetQuery = useDebouncedCallback(setSearchQuery, 300);
+  const [debouncedQuery] = useDebounce(searchQuery, 300);
+
   const { data, isError, isLoading } = useQuery({
-    queryKey: ['notes', page, searchQuery],
-    queryFn: () => fetchNotes(page, searchQuery),
+    queryKey: ['notes', page, debouncedQuery],
+    queryFn: () => fetchNotes(page, debouncedQuery),
     placeholderData: keepPreviousData,
   });
 
+  const handleSearch = (newQuery: string) => {
+    setPage(1);
+    setSearchQuery(newQuery);
+  };
   const totalPages = data?.totalPages ?? 0;
 
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox value={searchQuery} onSearch={debouncedSetQuery} />
+        <SearchBox value={debouncedQuery} onSearch={handleSearch} />
         {totalPages > 1 && <Pagination page={page} totalPages={totalPages} setPage={setPage} />}
         <button className={css.button} onClick={openModal}>
           Create note +

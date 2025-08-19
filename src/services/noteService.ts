@@ -25,7 +25,7 @@ export const deleteNote = async ({id}: Pick<Note, "id">) => {
     return res.data
 }
 
-export const createNote = async (newNote: Omit<Note, 'id'>) => {
+export const createNote = async (newNote: Omit<Note, 'id' | "createdAt" | "updatedAt">) => {
     const res = await axios.post<Note>('/notes', newNote);
     return res.data
 }
